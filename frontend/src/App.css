@@ -1,17 +1,20 @@
 body {
     height: 100vh;
+    overflow-y: hidden;
     font-family: 'Roboto', sans-serif;
 }
 .layout{
+  max-height: 100%;
   display: flex;
   flex-direction: row;
 }
 main{
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 .content{
   display: flex;
   flex-direction: column;
   flex:1;
+  height: 100vh;
 }

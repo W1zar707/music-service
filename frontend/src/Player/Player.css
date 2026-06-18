@@ -1,0 +1,129 @@
+.player p,
+.player span,
+.player i {
+    color: white;
+}
+
+.player {
+    display: flex;
+    align-items: stretch;
+    background-color: #30302e;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.player .controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 33%;
+}
+
+.player .cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 15%;
+    object-fit: cover;
+}
+
+.player .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player .metadata {
+    color: #faf9f5;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 33%;
+    gap: 5%;
+}
+
+.player .volume {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 33%;
+}
+
+.player .buttons {
+    gap: 5%;
+    flex: 1;
+}
+
+.player .buttons button {
+    width: 36px;
+    height: 36px;
+    background: none;
+    cursor: pointer;
+    border-radius: 30%;
+    border: 1px solid #65645f;
+    padding: 4px;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player .buttons button i {
+    font-size: 24px;
+}
+
+.player .ti:hover {
+    color: grey;
+}
+
+.player .progress {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    gap: 5%;
+}
+
+.player .progress input {
+    flex: 1;
+}
+
+.player input[type="range"] {
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #534ab7;
+    outline: none;
+    cursor: pointer;
+}
+
+.player input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: white;
+    border: 2px solid black;
+    
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+}
+
+.player .volume {
+    font-size: 24px;
+}
+
+.player .metadata .title-metadata .authors {
+    color: grey;
+    font-size: 14px;
+}
+
+.player .title-metadata {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.player .title-metadata p {
+    margin: 0;
+}

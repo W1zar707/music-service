@@ -1,0 +1,17 @@
+body {
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+.layout{
+  display: flex;
+  flex-direction: row;
+}
+main{
+  flex: 1;
+  overflow-y: scroll;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  flex:1;
+}

@@ -1,0 +1,43 @@
+main.search .search-header{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid #65645f;
+}
+main.search .search-bar{
+    display: flex;
+    height: 40px;
+    background-color: darkgrey;
+    border-radius: 12px;
+}
+main.search .search-bar input{
+    flex: 1;
+    height: 100%;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    background-color: #65645f;
+    color: #faf9f5;
+    padding: 10px;
+}
+main.search .search-bar button{
+    aspect-ratio: 1;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+main.search .search-bar button i{
+    font-size: 22px;
+}
+main.search .search-header .search-filters{
+    display: flex;
+    gap: 8px;
+}
+main.search .search-header .search-filters button{
+    background: none;
+    border: 1px solid #65645f;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}

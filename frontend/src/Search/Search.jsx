@@ -28,55 +28,30 @@ function Search() {
                 </div>
             </div>
             <div className='search-result'>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
-                <p>3</p>
+                <section className='tracks'>
+                    <h3>Треки</h3>
+                    <article className='track'>
+                        <img src='/600x600.jpg'></img>
+                        <div className='title'>
+                            <p className='name'>Rare Death</p>
+                            <p className='authors'>Boulevard Depo, i61</p>
+                        </div>
+                        <p className='duration'>9:00</p>
+                    </article>
+                </section>
+                <div className='albums'></div>
+                <section className='artists'>
+                    <h3>Артисты</h3>
+                    <article className='artist'>
+                        <img src='/boulevard depo orig.png'></img>
+                        <p className='name'>Boulevard Depo</p>
+                    </article>
+                    <article className='artist'>
+                        <img src='/saluki orig.png'></img>
+                        <p className='name'>Saluki</p>
+                    </article>
+                </section>
+
 
             </div>
         </main>

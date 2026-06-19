@@ -5,7 +5,7 @@ from .models import *
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
-from django_elasticsearch_dsl.search import Search
+from django_opensearch_dsl.search import Search
 from .documents import *
 # Create your views here.
 class ArtistListView(generics.GenericAPIView):
@@ -37,7 +37,17 @@ class SearchView(APIView):
         )
         s = s.query(
             "multi_match", 
-            query=search_string, 
+            query=search_string,
+            fields=[
+                'name',
+                'album.name',
+                'artists.name'
+            ]
+        )
+        s = s.suggest(
+            'name_suggest',
+            search_string,
+            completion={'field':'name_suggest'}
         )
         response = s.execute()
         hits = []
@@ -46,4 +56,12 @@ class SearchView(APIView):
             item['index_name'] = hit.meta.index 
             item['id'] = hit.meta.id     
             hits.append(item)
-        return Response(hits)
+
+        suggestion = []
+        for option in response.suggest.name_suggest[0].options:
+            suggestion.append(option['text'])
+        return Response({
+
+            'hits':hits,
+            'suggestions':suggestion
+            })

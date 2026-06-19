@@ -66,12 +66,17 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-  elasticsearch:
-    image: elasticsearch:8.12.0
-    container_name: elasticsearch
+  opensearch:
+    build: 
+      context: ./opensearch
+      dockerfile: Dockerfile
+    container_name: opensearch
+    env_file:
+      - ./.env
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
+      - DISABLE_SECURITY_PLUGIN=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
 

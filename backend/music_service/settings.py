@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'users',
-    'django_elasticsearch_dsl'
+    'django_opensearch_dsl'
 ]
 
 MIDDLEWARE = [
@@ -80,13 +80,18 @@ CACHES = {
     }
 }
 
-ELASTICSEARCH_DSL = {
+OPENSEARCH_DSL = {
     'default':{
-        'hosts':'http://elasticsearch:9200'
-    }
+        'hosts':'http://opensearch:9200'
+    },
+    # 'secure': {
+    #     'hosts': [{"scheme": "http", "host": "opensearch", "port": 9200}],
+    #     'http_auth': ("admin", "password"),
+    #     'timeout': 120,
+    # },
 }
 
-ELASTICSEARCH_DSL_AUTO_REFRESH = True
+OPENSEARCH_DSL_SIGNAL_PROCESSOR = 'django_opensearch_dsl.signals.RealTimeSignalProcessor'
 
 DATABASES = {
     'default': {

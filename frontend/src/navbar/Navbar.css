@@ -6,7 +6,7 @@ nav{
     background-color: #262624;
     color: rgba(194, 192, 182, 1);
 }
-.title{
+nav .title{
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -17,14 +17,14 @@ nav{
     font-size: 20px;
     color: #faf9f5;
 }
-.tabs{
+nav .tabs{
     display: flex;
     flex-direction: column;
     align-items: start;
     margin-top: 15px;
     margin-bottom: 15px;
 }
-.tabs a{
+nav .tabs a{
     width: 100%;
     height: 35px;
     border: none;
@@ -39,17 +39,17 @@ nav{
     padding-left: 15px;
     font-size: 16px;
 }
-.tabs a:hover{
+nav .tabs a:hover{
     background-color: rgba(255, 255, 255, 0.05);
     color: #faf9f5;
 }
-.tabs a span{
+nav .tabs a span{
     color: inherit;
 }
-.playlists{
+nav .playlists{
     padding-left: 15px;
 }
-.playlists ul{
+nav .playlists ul{
     margin-top: 15px;
     width: 100%;
     list-style: none;
@@ -57,7 +57,7 @@ nav{
     flex-direction: column;
     gap: 8px;
 }
-.playlists li{
+nav .playlists li{
     width: 100%;
     display: flex;
     align-items: center;
@@ -66,13 +66,13 @@ nav{
     cursor: pointer;
     font-size: 14px;
 }
-.playlists li:hover{
+nav .playlists li:hover{
     color: #faf9f5;
 }
-.playlists li p{
+nav .playlists li p{
     color: inherit;
 }
-.playlists li::before{
+nav .playlists li::before{
     content: '';
     background-color: #534ab7;
     width: 8px;

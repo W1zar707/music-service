@@ -96,6 +96,7 @@ class AlbumDocument(Document):
     def prepare_name(self, instance):
         return instance.name
     
+
     def prepare_name_suggest(self,instance):
         return {
             'input':[
@@ -111,7 +112,7 @@ class AlbumDocument(Document):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).prefetch_related('artists')
 
-    def get_instances_from_related_model(self, related_model):
+    def get_instances_from_related(self, related_model):
         if isinstance(related_model, Artist):
             return related_model.albums.all() 
     

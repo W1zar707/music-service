@@ -79,8 +79,11 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
 
 volumes:
   pgdata:
   minio_data:
   redis_data:
+  opensearch_data:

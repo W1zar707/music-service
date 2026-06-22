@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-
+class AlbumItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=255)
+    cover = serializers.ImageField(required=False)
+    def to_representation(self, instance):
+        return super().to_representation(instance)
 
 class AlbumListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)

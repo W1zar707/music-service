@@ -20,5 +20,6 @@ from .views import *
 urlpatterns = [
     path('artists', ArtistListView.as_view()),
     path('artists/<slug:artist_slug>', ArtistItemView.as_view()),
-    path('search', SearchView.as_view())
+    path('search', SearchView.as_view()),
+    path('suggest',SuggestView.as_view())
 ]

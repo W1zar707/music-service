@@ -1,8 +1,15 @@
 import './Search.css'
 import usePlayerStore from '../store/playerstore'
 import formatTime from '../utils/formatTime';
+import { useEffect, useState } from 'react';
+import api from '../utils/axios'
 function Search() {
     const { track, setTrack, current, isPause, setIsPause } = usePlayerStore();
+    const [suggest, setSuggest] = useState('');
+    const [query, setQuery] = useState('');
+    const [best_result, setBestResult] = useState({})
+    const [tracks,setTracks] = useState([])
+    const [artists,setArtists] = useState([])
     function handleSetTrack(e) {
         if (track?.url === e.url) {
             setIsPause(!isPause)
@@ -11,6 +18,29 @@ function Search() {
             setTrack({ url: e.url, name: e.name, authors: e.authors, cover: e.cover });
         }
     }
+    useEffect(() => {
+        const controller = new AbortController();
+        const timeout = setTimeout(async () => {
+            try{
+                const { data } = await api.post(
+                    '/search',
+                    { search: query },
+                    { signal: controller.signal}
+                );
+                setArtists(data.artists)
+                setTracks(data.tracks)
+                setBestResult(data.best_result)
+                console.log(data.best_result)
+            }
+            catch(error){
+                console.error('Ошибка:', error);
+            }
+        }, 500);
+        return () => {
+            clearTimeout(timeout);
+            controller.abort();
+        };
+    }, [query])
     return (
         <main className='search'>
             <div className='search-header'>
@@ -18,7 +48,7 @@ function Search() {
                     <button>
                         <i className="ti ti-search"></i>
                     </button>
-                    <input type="text" />
+                    <input type="text" value={query} onChange={(e) => setQuery(e.target.value)}/>
                     <button aria-label="Искать">
                         <i className="ti ti-x"></i>
                     </button>
@@ -41,27 +71,20 @@ function Search() {
             <div className='search-result'>
                 <section className='best-result'>
                     <h3>Лучший результат</h3>
-                    <section className='artist'>
+                    {best_result?.type === 'artist' &&(<section className='artist'>
                         <img src="/boulevard depo orig.png" alt="" className='cover' />
                         <section>
-                            <h2>Boulevard Depo</h2>
+                            <h2>{best_result.name}</h2>
                             <ul className='albums'>
-                                <li>
-                                    <img src="/rare gods vol 1 600x600.jpg" alt="" />
-                                </li>
-                                <li>
-                                    <img src="/sweet dreams 600x600.jpg" alt="" />
-                                </li>
-                                <li>
-                                    <img src="/rapp2 600x600.jpg" alt="" />
-                                </li>
-                                <li>
-                                    <img src="СЕРТОЛОВСКИЙ ТОКСИК 600x600.jpg" alt="" />
-                                </li>
+                                {best_result.albums.map((album)=>(
+                                    <li key={album.id}>
+                                        <img src={album.cover.url} alt="" />
+                                    </li>
+                                ))}
                             </ul>
                         </section>
-                    </section>
-                    <section className='album'>
+                    </section>)}
+                    {best_result?.type === 'album'&&(<section className='album'>
                         <img src="/rare gods vol 1 600x600.jpg" alt="" className='cover' />
                         <section>
                             <div className='meta'>
@@ -106,7 +129,7 @@ function Search() {
                                 </li>
                             </ul>
                         </section>
-                    </section>
+                    </section>)}
                 </section>
                 <section className='tracks'>
                     <h3>Треки</h3>

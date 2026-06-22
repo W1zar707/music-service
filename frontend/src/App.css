@@ -1,20 +1,30 @@
 body {
-    height: 100vh;
-    overflow-y: hidden;
-    font-family: 'Roboto', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Roboto', sans-serif;
 }
-.layout{
-  max-height: 100%;
+input, button, textarea {
+    font-family: inherit;
+}
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.layout {
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
 }
-main{
+
+main {
   flex: 1;
-  overflow-y: hidden;
 }
-.content{
+
+.content {
   display: flex;
   flex-direction: column;
-  flex:1;
-  height: 100vh;
+  flex: 1;
+  overflow: hidden;
 }

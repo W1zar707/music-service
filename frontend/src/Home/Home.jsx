@@ -1,7 +1,22 @@
 function Home(){
     return (
-        <main>
-            <h1>Home</h1>
+        <main className='home'>
+            <section className='recomendation'>
+                <h2>Рекомендации</h2>
+                <ul>
+                    <li>
+
+                    </li>
+                </ul>
+            </section>
+            <section className='history'>
+                <h2>История</h2>
+                <ul>
+                    <li>
+                        
+                    </li>
+                </ul>
+            </section>
         </main>
     )
 }

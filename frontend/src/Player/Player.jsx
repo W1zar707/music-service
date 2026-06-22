@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react"
+import usePlayerStore from "../store/playerstore";
 import './Player.css'
+import formatTime from "../utils/formatTime";
 function Player() {
     const audio = useRef();
-    const [cover, setCover] = useState('../public/600x600.jpg');
-    const [name, setName] = useState('Rare Woman No Cry');
-    const [authors, setAuthors] = useState('Boulevard Depo, i61');
-    const [current, setCurrent] = useState(0);
     const [duration, setDuration] = useState(0);
     const [progress, setProgress] = useState(0);
-    const [isPause, setIsPause] = useState(true);
     const [volume, setVolume] = useState(0);
+
+    const { track, isPause, current, setIsPause, setCurrent } = usePlayerStore()
+
     useEffect(() => {
         audio.current.src = '/Rare Woman No Cry.mp3';
         navigator.mediaSession.setActionHandler('play', () => {
@@ -21,36 +21,41 @@ function Player() {
             setIsPause(true)
         })
     }, []);
-    function formatTime(e) {
-        e = Math.floor(e);
-        return `${Math.floor(e / 60)}:${e % 60 >= 10 ? e % 60 : '0' + e % 60}`;
-    }
+
+    useEffect(() => {
+        audio.current.src = track.url;
+    }, [track])
+    
+    useEffect(()=>{
+        if(isPause){
+            audio.current.pause();
+        }
+        else{
+            audio.current.play();
+        }
+    },[isPause])
+
     function handleLoadedMetadata() {
+        if (navigator.userActivation.hasBeenActive) {
+            audio.current.play()
+        }
         setDuration(Math.floor(audio.current.duration));
         setVolume(audio.current.volume * 100);
     }
     function handleProgressChange(e) {
         setCurrent(Math.floor(duration / 100 * e.target.value));
         setProgress(e.target.value);
-        console.log(Math.floor(duration / 100) * e.target.value);
         audio.current.currentTime = Math.floor(duration / 100 * e.target.value);
     }
     function handlePause(e) {
-        if (isPause) {
-            audio.current.play();
-            setIsPause(false);
-        }
-        else {
-            audio.current.pause();
-            setIsPause(true);
-        }
+        setIsPause(!isPause);
     }
     function handleVolume(e) {
-        console.log(e.target.value)
         setVolume(e.target.value);
         audio.current.volume = e.target.value / 100;
     }
     function handleTimeUpdate(e) {
+        if (audio.current.readyState < 2) return
         const currentTime = Math.floor(audio.current.currentTime);
         setCurrent(currentTime);
         const percent = duration / 100;
@@ -59,13 +64,13 @@ function Player() {
     return (
         <div className="player">
             <audio ref={audio}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleLoadedMetadata} />
+                onLoadedMetadata={handleLoadedMetadata}
+                onTimeUpdate={handleTimeUpdate} />
             <div className="metadata">
-                <img className="cover" src={cover} alt={`Обложка ${name}`} />
+                <img className="cover" src={track.cover} alt={`Обложка ${track.name}`} />
                 <div className="title-metadata">
-                    <p className="name">{name}</p>
-                    <p className="authors">{authors}</p>
+                    <p className="name">{track.name}</p>
+                    <p className="authors">{track.authors}</p>
                 </div>
             </div>
             <div className="controls">

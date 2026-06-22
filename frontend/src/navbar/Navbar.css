@@ -2,9 +2,10 @@ nav{
     display: flex;
     flex-direction: column;
     width: 250px;
-    height: 100vh;
+    height: 100%;
     background-color: #262624;
     color: rgba(194, 192, 182, 1);
+    border: 0.5px solid rgba(222, 220, 209, 0.15);
 }
 nav .title{
     display: flex;
@@ -38,6 +39,7 @@ nav .tabs a{
     cursor: pointer;
     padding-left: 15px;
     font-size: 16px;
+    outline: none;
 }
 nav .tabs a:hover{
     background-color: rgba(255, 255, 255, 0.05);

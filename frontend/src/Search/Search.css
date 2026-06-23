@@ -244,6 +244,7 @@ main.search .search-result .artists .artist img{
     width: 100%;
     object-fit: contain;
     mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    pointer-events: none;
 }
 
 main.search .search-result .artists .artist p.name{

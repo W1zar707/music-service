@@ -7,7 +7,7 @@ function Search() {
     const { track, setTrack, current, isPause, setIsPause } = usePlayerStore();
     const [suggest, setSuggest] = useState('');
     const [query, setQuery] = useState('');
-    const [best_result, setBestResult] = useState({})
+    const [best_result, setBestResult] = useState(null)
     const [tracks,setTracks] = useState([])
     const [artists,setArtists] = useState([])
     function handleSetTrack(e) {
@@ -69,9 +69,9 @@ function Search() {
                 </div>
             </div>
             <div className='search-result'>
-                <section className='best-result'>
+                {best_result&&(<section className='best-result'>
                     <h3>Лучший результат</h3>
-                    {best_result?.type === 'artist' &&(<section className='artist'>
+                    {best_result.type === 'artist' &&(<section className='artist'>
                         <img src="/boulevard depo orig.png" alt="" className='cover' />
                         <section>
                             <h2>{best_result.name}</h2>
@@ -84,7 +84,7 @@ function Search() {
                             </ul>
                         </section>
                     </section>)}
-                    {best_result?.type === 'album'&&(<section className='album'>
+                    {best_result.type === 'album'&&(<section className='album'>
                         <img src="/rare gods vol 1 600x600.jpg" alt="" className='cover' />
                         <section>
                             <div className='meta'>
@@ -130,7 +130,7 @@ function Search() {
                             </ul>
                         </section>
                     </section>)}
-                </section>
+                </section>)}
                 <section className='tracks'>
                     <h3>Треки</h3>
                     <article className={'track' + (track?.url === '/Rare Death.mp3' ? ' active' : '')} onClick={() => handleSetTrack({ url: '/Rare Death.mp3', name: 'Rare Death', authors: 'Boulevard Depo, i61', cover: '/rare gods vol 1 600x600.jpg' })}>

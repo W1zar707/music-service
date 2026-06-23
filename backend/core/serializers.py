@@ -14,7 +14,6 @@ class AlbumListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         return data
-
 class ArtistListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=255)
@@ -31,3 +30,11 @@ class ArtistItemSerializer(serializers.Serializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         return data
+class TrackListSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=255)
+    artists = ArtistListSerializer(many=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data
+

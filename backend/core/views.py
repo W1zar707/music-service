@@ -114,7 +114,10 @@ class SearchView(APIView):
             if i == 0:
                 if item['index_name'] == 'artist':
                     albums = Album.objects.filter(artists__id=item['id']).prefetch_related('artists').only('id','name')
-                    item['albums'] = AlbumItemSerializer(albums, many=True).data
+                    item['albums'] = AlbumListSerializer(albums, many=True).data
+                if item['index_name'] == 'album':
+                    tracks = Track.objects.filter(album__id=item['id']).order_by('order')
+                    item['tracks'] = TrackListSerializer(tracks, many=True).data
                 hits['best_result'] = item
             else:
                 hits[f'{hit.meta.index}'].append(item)

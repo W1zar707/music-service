@@ -7,14 +7,13 @@ import Home from './Home/Home'
 import Search from './Search/Search'
 
 function Layout() {
-  return (
-    <div className="layout">
-      <Navbar />
-      <div className='content'>
-        <Outlet />
-        <Player />
-      </div>
+  return (<>
+    <Navbar />
+    <div className='content'>
+      <Outlet />
+      <Player />
     </div>
+  </>
   )
 }
 function App() {

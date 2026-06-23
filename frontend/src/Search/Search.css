@@ -78,11 +78,22 @@ main.search .search-result .best-result .artist{
     width: 100%;
     height: 200px;
     padding: 0;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: ease 0.3s ;
+}
+main.search .search-result .best-result .artist:hover{
+    background-color: rgba(0,0,0,0.5);
+    
+}
+main.search .search-result .best-result .artist:hover .cover{
+    transform: translateY(-10px);
 }
 main.search .search-result .best-result .artist .cover{
     height: 100%;
     object-fit: contain;
     mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    transition: ease 0.3s;
 }
 main.search .search-result .best-result .artist section{
     flex: 1;
@@ -111,26 +122,44 @@ main.search .search-result .best-result .artist ul{
 main.search .search-result .best-result .artist li{
     height: 100%;
     overflow-y: visible;
-    transition: transform 0.3s;
+    transition: scale 0.3s;
+    animation: albums-appearance 0.6s both;
+}
+@keyframes albums-appearance {
+    from{
+        transform: translateX(100vw);
+    }
+    to{
+        transform: translateX(0);
+    }
 }
 main.search .search-result .best-result .artist li img{
     height: 100%;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.3s;
 }
 main.search .search-result .best-result .artist li:hover{
-    transform: scale(1.05);
+    scale: 1.05;
 }
 main.search .search-result .best-result .album{
     width: 100%;
     height: 250px;
     display: flex;
     padding-right: 15px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+}
+main.search .search-result .best-result .album:hover{
+    background-color: rgba(0,0,0,0.5);
 }
 main.search .search-result .best-result .album .cover{
     height: 100%;
     border-radius: 12px;
+    transition: scale 0.3s;
+}
+main.search .search-result .best-result .album:hover .cover{
+    scale: 1.05;
 }
 main.search .search-result .best-result .album section{
     display: flex;
@@ -143,9 +172,6 @@ main.search .search-result .best-result .album section{
 main.search .search-result .best-result .album section .meta{ 
     color: rgba(250, 249, 245, 1);
     margin: 10px 0 10px 10px;
-} 
-main.search .search-result .best-result .album section .meta p{
-    color:rgba(194, 192, 182, 1);
 }
 main.search .search-result .best-result .album ul{
     flex: 1;
@@ -165,10 +191,36 @@ main.search .search-result .best-result .album li{
     flex-shrink: 0;
     height: 50px;
     display: flex;
+    gap: 8px;
     flex-direction: row;
     align-items: center;
     cursor: pointer;
     border-radius: 12px;
+    animation: tracks-appearance 0.6s both;
+}
+main.search .search-result .best-result .album li.active{
+    background-color: #EEEDFE !important;
+    color: #534AB7;
+}
+main.search .search-result .best-result .album li:hover{
+    background-color: rgba(0,0,0,0.5);
+}
+@keyframes tracks-appearance {
+    from{
+        transform: translateY(100vh);
+    }
+    to{
+        transform: translateY(0);
+    }
+}
+main.search .search-result .best-result .album section ul li p.name{
+    color:rgba(250, 249, 245, 1);
+}
+main.search .search-result .best-result .album li.active p.name{
+    color: #534AB7;
+}
+main.search .search-result .best-result .album section ul li p.authors{
+    color: rgba(194, 192, 182, 1);
 }
 main.search .search-result .best-result .album li:hover{
     background-color: rgba(255,255,255,0.05);
@@ -185,6 +237,9 @@ main.search .search-result h3{
 }
 main.search .search-result .tracks{
     padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 main.search .search-result .tracks .track {
     display: flex;
@@ -194,6 +249,7 @@ main.search .search-result .tracks .track {
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 8px;
+    transition: ease 0.3s;
 }
 main.search .search-result .tracks .track:hover{
     background-color: rgba(38, 38, 36, 1);
@@ -211,6 +267,9 @@ main.search .search-result .tracks .track .name{
     color: rgba(250, 249, 245, 1);
 }
 main.search .search-result .tracks .track.active .name{
+    color: #534AB7;
+}
+main.search .search-result .tracks .track.active .time{
     color: #534AB7;
 }
 main.search .search-result .tracks .track .authors{

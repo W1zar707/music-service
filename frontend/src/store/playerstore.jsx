@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 const usePlayerStore = create((set, get) => ({
     track:{
+        id:null,
         url:null,
         name:null,
         authors:null,
@@ -10,7 +11,7 @@ const usePlayerStore = create((set, get) => ({
     current:0,
     isPause:true,
 
-    setTrack:(track) => set({track, isPause:false}),
+    setTrack:(track) => {console.log(track.id);set({track, isPause:false})},
     setCurrent:(current)=>set({current}),
     setIsPause:(isPause)=>set({isPause})
 }))

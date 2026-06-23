@@ -105,23 +105,44 @@ class SearchView(APIView):
         )
         response = s.execute()
         hits = defaultdict(list)
+        track_ids = []
+        album_ids = []
+        artist_ids = []
         for i, hit in enumerate(response):
-            logging.warning(f'{hit.meta.index} {hit.meta.score} {hit.name}')
+            logging.warning(hit)
             item = hit.to_dict()     
             item['index_name'] = hit.meta.index 
             item['id'] = hit.meta.id     
             item['score'] = hit.meta.score
             if i == 0:
                 if item['index_name'] == 'artist':
-                    albums = Album.objects.filter(artists__id=item['id']).prefetch_related('artists').only('id','name')
-                    item['albums'] = AlbumListSerializer(albums, many=True).data
+                    raw_artist = Artist.objects.filter(id=item['id']).first()
+                    artist = ArtistItemSerializer(raw_artist).data
+                    item['albums'] = artist.get('albums')
+                    item['cover'] = artist.get('cover')
                 if item['index_name'] == 'album':
-                    tracks = Track.objects.filter(album__id=item['id']).order_by('order')
-                    item['tracks'] = TrackListSerializer(tracks, many=True).data
+                    raw_album = Album.objects.filter(id=item['id']).prefetch_related('artists').first()
+                    album = AlbumItemSerializer(raw_album).data
+                    item=album
+                    item['index_name'] = hit.meta.index 
                 hits['best_result'] = item
             else:
-                hits[f'{hit.meta.index}'].append(item)
+                if item['index_name'] == 'tracks':  
+                    track_ids.append(item['id'])
+                elif item['index_name'] == 'artist':
+                    artist_ids.append(item['id'])
+                elif item['index_name'] == 'album':
+                    album_ids.append(item['id'])
 
-        return Response({
-            'hits':hits,
-            })
+
+        tracks = Track.objects.filter(id__in=track_ids).prefetch_related('album', 'artists')
+        hits['tracks'] = TrackListSerializer(tracks,many=True).data
+
+        artists = Artist.objects.filter(id__in=artist_ids)
+        hits['artists'] = ArtistListSerializer(artists,many=True).data
+
+        albums = Album.objects.filter(id__in=album_ids).prefetch_related('artists')
+        hits['albums'] = AlbumListSerializer(albums,many=True).data
+        return Response(
+            hits
+        )

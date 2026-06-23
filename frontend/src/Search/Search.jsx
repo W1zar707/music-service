@@ -8,31 +8,36 @@ function Search() {
     const [suggest, setSuggest] = useState('');
     const [query, setQuery] = useState('');
     const [best_result, setBestResult] = useState(null)
-    const [tracks,setTracks] = useState([])
-    const [artists,setArtists] = useState([])
+    const [tracks, setTracks] = useState(null)
+    const [artists, setArtists] = useState(null)
     function handleSetTrack(e) {
-        if (track?.url === e.url) {
+        if (track?.id === e.id) {
             setIsPause(!isPause)
         }
         else {
-            setTrack({ url: e.url, name: e.name, authors: e.authors, cover: e.cover });
+            setTrack({ id:e.id,url: e.url, name: e.name, authors: e.authors, cover: e.cover });
         }
     }
     useEffect(() => {
         const controller = new AbortController();
         const timeout = setTimeout(async () => {
-            try{
+            try {
                 const { data } = await api.post(
                     '/search',
                     { search: query },
-                    { signal: controller.signal}
+                    { signal: controller.signal }
                 );
                 setArtists(data.artists)
                 setTracks(data.tracks)
                 setBestResult(data.best_result)
+                console.log('best_Result:')
                 console.log(data.best_result)
+                console.log('tracks:')
+                console.log(data.tracks)
+                console.log('artists:')
+                console.log(data.artists)
             }
-            catch(error){
+            catch (error) {
                 console.error('Ошибка:', error);
             }
         }, 500);
@@ -48,7 +53,7 @@ function Search() {
                     <button>
                         <i className="ti ti-search"></i>
                     </button>
-                    <input type="text" value={query} onChange={(e) => setQuery(e.target.value)}/>
+                    <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
                     <button aria-label="Искать">
                         <i className="ti ti-x"></i>
                     </button>
@@ -69,165 +74,86 @@ function Search() {
                 </div>
             </div>
             <div className='search-result'>
-                {best_result&&(<section className='best-result'>
+                {best_result && (<section className='best-result'>
                     <h3>Лучший результат</h3>
-                    {best_result.type === 'artist' &&(<section className='artist'>
-                        <img src="/boulevard depo orig.png" alt="" className='cover' />
+                    {best_result.index_name === 'artist' && (<section className='artist'>
+                        <img src={best_result.cover} alt="" className='cover' />
                         <section>
                             <h2>{best_result.name}</h2>
                             <ul className='albums'>
-                                {best_result.albums.map((album)=>(
-                                    <li key={album.id}>
-                                        <img src={album.cover.url} alt="" />
+                                {best_result.albums.map((album, index) => (
+                                    <li key={album.id} style={{ animationDelay: `${index * 0.15}s` }}>
+                                        <img src={album.cover} alt="" />
                                     </li>
                                 ))}
                             </ul>
                         </section>
                     </section>)}
-                    {best_result.type === 'album'&&(<section className='album'>
-                        <img src="/rare gods vol 1 600x600.jpg" alt="" className='cover' />
+                    {best_result.index_name === 'album' && (<section className='album'>
+                        <img src={best_result.cover} alt="" className='cover' />
                         <section>
                             <div className='meta'>
-                                <h2>Rare Gods Vol.1</h2>
-                                <p>Boulevard Depo, i61</p>
+                                <h2>{best_result.name}</h2>
+                                <p>{best_result.artists.map((artist) => (artist.name))}</p>
                             </div>
                             <ul>
-                                <li>
-                                    <div className='title'>
-                                        <p className='name'>Rare Death</p>
-                                        {/* <p className='authors'></p> */}
-                                    </div>
-                                    <p className='time'>9:00</p>
-                                </li>
-                                <li>
-                                    <div className='title'>
-                                        <p className='name'>Rare Woman No Cry</p>
-                                        <p className='authors'>awd</p>
-                                    </div>
-                                    <p className='time'>9:00</p>
-                                </li>
-                                <li>
-                                    <div className='title'>
-                                        <p className='name'>Rare Kaaviilxraava Oo / Rare Clean</p>
-                                        <p className='authors'></p>
-                                    </div>
-                                    <p className='time'>9:00</p>
-                                </li>
-                                <li>
-                                    <div className='title'>
-                                        <p className='name'>Rare Tribal Cabin</p>
-                                        <p className='authors'>awd</p>
-                                    </div>
-                                    <p className='time'>9:00</p>
-                                </li>
-                                <li>
-                                    <div className='title'>
-                                        <p className='name'>Rare Moscow Snow</p>
-                                        <p className='authors'></p>
-                                    </div>
-                                    <p className='time'>9:00</p>
-                                </li>
+                                {best_result.tracks.map((trackItem,index) => (
+                                    <li key={trackItem.id} style={{animationDelay: `${index*0.15}s`}} className={track?.id === trackItem.id ? 'active' : ''} onClick={()=>handleSetTrack({
+                                        id:trackItem.id,
+                                        url: trackItem.path,
+                                        name:trackItem.name,
+                                        authors:(best_result.artists.map((artist) => (artist.name))+ ' ft. '+ trackItem.artists.map((artist) => (artist.name))),
+                                        cover: best_result.cover 
+                                    })}>
+                                        <p className='order'>{trackItem.order}</p>
+                                        <div className='title'>
+                                            <p className='name'>{trackItem.name}</p>
+                                            <p className='authors'>{trackItem.artists && trackItem.artists.length > 0 && (<>{'ft.'} {trackItem.artists.map((artist) => (artist.name))}</>)}</p>
+                                        </div>
+                                        <p className='time'>{track?.id === trackItem.id ? formatTime(current) : '9:00'}</p>
+                                    </li>
+                                ))}
                             </ul>
                         </section>
                     </section>)}
                 </section>)}
-                <section className='tracks'>
+                {tracks && tracks.length > 0 && (<section className='tracks'>
                     <h3>Треки</h3>
-                    <article className={'track' + (track?.url === '/Rare Death.mp3' ? ' active' : '')} onClick={() => handleSetTrack({ url: '/Rare Death.mp3', name: 'Rare Death', authors: 'Boulevard Depo, i61', cover: '/rare gods vol 1 600x600.jpg' })}>
-                        <img src='/rare gods vol 1 600x600.jpg'></img>
-                        <div className='title'>
-                            <p className='name'>Rare Death</p>
-                            <p className='authors'>Boulevard Depo, i61</p>
-                        </div>
-                        <p className='time'>{track?.url === '/Rare Death.mp3' ? formatTime(current) : '9:00'}</p>
-                    </article>
-                    <article className={'track' + (track?.url === '/BROTHA BROTHA.mp3' ? ' active' : '')} onClick={() => handleSetTrack({ url: '/BROTHA BROTHA.mp3', name: 'Brotha Brotha', authors: 'Saluki, Boulevard Depo', cover: '/wild east 600x600.jpg' })}>
-                        <img src='/wild east 600x600.jpg'></img>
-                        <div className='title'>
-                            <p className='name'>Brotha Brotha</p>
-                            <p className='authors'>Saluki, Boulevard Depo</p>
-                        </div>
-                        <p className='time'>{track?.url === '/BROTHA BROTHA.mp3' ? formatTime(current) : '9:00'}</p>
-                    </article>
-                </section>
-                <div className='albums'></div>
-                <section className='artists'>
-                    <h3>Артисты</h3>
-                    <ul>
+                    {tracks.map((trackItem) => (
+                        <article key={trackItem.id} className={`track ${track?.id === trackItem.id ? 'active' : ''}`} onClick={() => handleSetTrack({
+                            id: trackItem.id,
+                            url: trackItem.path,
+                            name: trackItem.name,
+                            authors: (trackItem.album.artists.map((artist) => (artist.name))+ ' ft. '+ trackItem.artists.map((artist) => (artist.name))),
+                            cover: trackItem.cover 
+                            })}>
+                    <img src={trackItem.cover}></img>
+                    <div className='title'>
+                        <p className='name'>{trackItem.name}</p>
+                        <p className='authors'>{trackItem.album.artists.map((artist) => (artist.name))} ft. {trackItem.artists.map((artist) => (artist.name))}</p>
+                    </div>
+                    <p className='time'>{track?.id === trackItem.id ? formatTime(current) : '9:00'}</p>
+                </article>
+                ))}
+            </section>)}
+            <div className='albums'></div>
+            {artists && artists.length > 0 && (<section className='artists'>
+                <h3>Артисты</h3>
+                <ul>
+                    {artists.map((artist) => (
                         <li>
                             <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
+                                <img src={artist.cover} alt="" />
+                                <p className='name'>{artist.name}</p>
                             </article>
                         </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li><li>
-                            <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li><li>
-                            <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li><li>
-                            <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li><li>
-                            <article className='artist'>
-                                <img src='/boulevard depo orig.png' aria-hidden='true'></img>
-                                <p className='name'>Boulevard Depo</p>
-                            </article>
-                        </li>
-                        <li>
-                            <article className='artist'>
-                                <img src='/saluki orig.png' aria-hidden='true'></img>
-                                <p className='name'>Saluki</p>
-                            </article>
-                        </li>
-                    </ul>
-                </section>
+                    ))}
+                </ul>
+            </section>)}
 
 
-            </div>
-        </main>
+        </div>
+        </main >
     )
 }
 export default Search

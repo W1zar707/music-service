@@ -53,7 +53,7 @@ class ArtistDocument(Document):
 
     name = fields.TextField(
         analyzer='autocomplete_analyzer',
-        search_analyzer='russian_analyzer'
+        search_analyzer='autocomplete_analyzer'
         )
     name_suggest = fields.CompletionField()
 
@@ -78,12 +78,12 @@ class AlbumDocument(Document):
 
     name = fields.TextField(
         analyzer='autocomplete_analyzer',
-        search_analyzer='russian_analyzer'
+        search_analyzer='autocomplete_analyzer'
         )
     name_suggest = fields.CompletionField()
 
     artists = fields.NestedField(properties={
-        'name': fields.TextField(analyzer='russian_analyzer')
+        'name': fields.TextField(analyzer='autocomplete_analyzer',search_analyzer='autocomplete_analyzer')
     })
 
     class Django:
@@ -125,16 +125,16 @@ class TrackDocument(Document):
 
     name = fields.TextField(
         analyzer='autocomplete_analyzer',
-        search_analyzer='russian_analyzer'
+        search_analyzer='autocomplete_analyzer'
         )
     name_suggest = fields.CompletionField()
 
     album = fields.ObjectField(properties={
-        'name': fields.TextField(analyzer='russian_analyzer')
+        'name': fields.TextField(analyzer='autocomplete_analyzer',search_analyzer='autocomplete_analyzer')
     })
 
     artists = fields.NestedField(properties={
-        'name': fields.TextField(analyzer='russian_analyzer')
+        'name': fields.TextField(analyzer='autocomplete_analyzer',search_analyzer='autocomplete_analyzer')
     })
 
     class Django:

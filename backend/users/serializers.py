@@ -5,11 +5,17 @@ from django.core.exceptions import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150,required=True)
     password = serializers.CharField(write_only=True,required=True)
 
-    
+    def validate(self, data):
+        user = authenticate(username=data['username'], password=data['password'])
+        if not user:
+            raise serializers.ValidationError("Неверный логин или пароль")
+        data['user'] = user
+        return data
 
 
 

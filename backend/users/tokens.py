@@ -20,13 +20,13 @@ def generate_access_token(user_id:int) -> str:
 def invalidate_family(family_id:str):
     members = r.smembers(f'family:{family_id}')
     for i in members:
-        r.delete(f'rt:{i}')
+        r.delete(f'{i}')
     r.delete(f'family:{family_id}')
 
 def create_token_family(user,request):
     family_id = str(uuid.uuid4())
     rt = secrets.token_urlsafe(32)
-    rt_hash = sha256(rt)
+    rt_hash = sha256(rt.encode()).hexdigest()
 
     r.set(f'{rt_hash}',json.dumps({
         'user_id': user.id,
@@ -41,8 +41,8 @@ def create_token_family(user,request):
     return access, rt
 
 def refresh_token(rt:str)->tuple[str,str]|None:
-    rt_hash = sha256(rt)
-    raw = r.get(f'rt:{rt_hash}')
+    rt_hash = sha256(rt.encode()).hexdigest()
+    raw = r.get(f'{rt_hash}')
 
     if not raw:
         return None
@@ -54,10 +54,10 @@ def refresh_token(rt:str)->tuple[str,str]|None:
         return None
     
     data['is_used'] = True
-    r.set(f'rt:{rt_hash}', json.dumps(data))
+    r.set(f'{rt_hash}', json.dumps(data))
 
     new_rt = secrets.token_urlsafe(32)
-    new_rt_hash = sha256(new_rt)
+    new_rt_hash = sha256(new_rt.encode()).hexdigest()
 
     r.set(f'{rt_hash}',json.dumps({
         'user_id': data['user_id'],
@@ -70,8 +70,8 @@ def refresh_token(rt:str)->tuple[str,str]|None:
     return access, new_rt
 
 def logout_token(rt:str):
-    rt_hash = sha256(rt)
-    raw = r.get(f'rt:{rt_hash}')
+    rt_hash = sha256(rt.encode()).hexdigest()
+    raw = r.get(f'{rt_hash}')
     if not raw:
         return
     

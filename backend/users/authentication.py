@@ -11,7 +11,7 @@ class JWTCookieAuthentitication(BaseAuthentication):
             return None
         
         try:
-            payload = jwt.decode(access, settings.SECRET_KEY)
+            payload = jwt.decode(access, settings.SECRET_KEY,algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Access token истек')
         except jwt.InvalidTokenError:

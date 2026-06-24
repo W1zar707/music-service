@@ -1,0 +1,77 @@
+form.registration {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    background-color: rgba(48, 48, 46, 1);
+    gap: 20px;
+}
+
+form.registration .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+form.registration .field label {
+    width: 100%;
+}
+form.registration .field .field-message.error {
+    color: red;
+    font-size: 12px;
+}
+form.registration .field .field-bar {
+    height: 40px;
+    width: 100%;
+    background-color: rgba(38, 38, 36, 1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid rgba(222, 220, 209, 0.15);
+}
+form.registration .field .field-bar.error{
+    border-color: red;
+}
+form.registration .field .field-bar.success{
+    border-color: green;
+}
+form.registration .field .field-bar i {
+    height: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form.registration .field .field-bar input {
+    height: 100%;
+    flex: 1;
+    border-radius: 12px;
+    border: 0.5px solid rgba(222, 220, 209, 0.15);
+    outline: none;
+    padding: 10px;
+    font-size: 20px;
+}
+form.registration .field .field-bar button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 100%;
+    aspect-ratio: 1;
+}
+form.registration button[type="submit"] {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    border: 0.5px solid rgba(222, 220, 209, 0.15);
+    transition: background-color 0.3s;
+}
+
+form.registration button[type="submit"]:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}

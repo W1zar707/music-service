@@ -10,7 +10,7 @@ main.search .search-header {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border-bottom: 0.5px solid rgba(222, 220, 209, 0.15);;
+    border-bottom: 0.5px solid rgba(222, 220, 209, 0.15);
 }
 
 main.search .search-bar {

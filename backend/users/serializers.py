@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.password_validation import validate_password as django_validate_password
 from django.core.exceptions import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
+from core.serializers import *
 User = get_user_model()
 
 class LoginSerializer(serializers.Serializer):
@@ -41,7 +42,7 @@ class RegistrationSerializer(serializers.Serializer):
 
         user_instance = User(username=attrs.get('username'), email=attrs.get('email'))
         try:
-            validate_password(attrs['password'], user=user_instance)
+            django_validate_password(attrs['password'], user=user_instance)
         except ValidationError as error:
             raise serializers.ValidationError({"password": list(error.messages)})
 
@@ -55,3 +56,32 @@ class RegistrationSerializer(serializers.Serializer):
             password=validated_data['password']
         )
         return user
+    
+class ValidateSerializer(serializers.Serializer):
+    username = serializers.CharField(min_length=3,max_length=30,required=False,write_only=True)
+    email = serializers.EmailField(required=False,write_only=True)
+    password = serializers.CharField(required=False,write_only=True)
+
+    def validate_username(self,value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError('Имя занято')
+        return value
+
+    def validate_email(self,value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email уже используется')
+        return value
+
+    def validate_password(self,value):
+        try:
+            django_validate_password(value)
+        except ValidateSerializer as e:
+            raise serializers.ValidationError(e.message)
+        return value
+
+class ProfileSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+    

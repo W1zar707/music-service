@@ -23,3 +23,11 @@ main {
   flex: 1;
   overflow: hidden;
 }
+@keyframes shimmer {
+    from{
+        transform: scaleX(3) translateX(0);
+    }
+    to{
+        transform: scaleX(3) translateX(66.6%);
+    }
+}

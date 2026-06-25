@@ -22,5 +22,7 @@ urlpatterns = [
     path('registration',RegistrationView.as_view()),
     path('token/refresh',TokenRefreshView.as_view()),
     path('logout', LogoutView.as_view()),
-    path('validate', ValidateView.as_view())
+    path('validate', ValidateView.as_view()),
+    path('profile', ProfileView.as_view()),
+    path('profile/history', HistoryView.as_view())
 ]

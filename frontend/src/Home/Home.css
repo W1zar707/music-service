@@ -47,11 +47,77 @@ main.home .history ul li{
     border-radius: 12px;
     cursor: pointer;
     padding: 8px;
+    gap: 8px;
     transition: background-color 0.3s;
+    height: 70px;
 }
 main.home .history ul li:hover{
     background-color: rgba(0,0,0,0.5);
 }
+main.home .history ul li.active{
+    background-color: #EEEDFE !important;
+    color: #534AB7;
+}
+main.home .history ul li .cover{
+    width: 60px;
+    border-radius: 12px;
+    transition: transform 0.3s;
+}
+main.home .history ul li:hover .cover{
+    transform: scale(1.05);
+}
+main.home .history ul li .meta .authors .name{
+}
+main.home .history ul li .meta .authors{
+    color:rgba(194, 192, 182, 1);
+}
+
 main.home .history ul li .time{
     margin-left: auto;
+}
+main.home .history ul.loading li .cover{
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+main.home .history ul.loading li .meta{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+}
+main.home .history ul.loading li .meta .name{
+    width: 75%;
+    height: 19px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px;
+}
+main.home .history ul.loading li .meta .authors{
+    width: 50%;
+    height: 19px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px;
+}
+main.home .history ul.loading li .time{
+    width: 15%;
+    height: 19px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px;
+}
+main.home .history ul.loading li .cover::after,
+main.home .history ul.loading li .meta .authors::after,
+main.home .history ul.loading li .meta .name::after,
+main.home .history ul.loading li .time::after{
+    content: '';
+    position: absolute;
+    transform-origin: right;
+    background: linear-gradient(90deg,
+        #3a3a38 33.3%,
+        #4a4a48 50%,
+        #3a3a38 66.6%);
+    inset: 0;
+    animation: shimmer 1.4s infinite;
 }

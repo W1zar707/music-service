@@ -43,7 +43,9 @@ def create_token_family(user,request):
 def refresh_token(rt:str)->tuple[str,str]|None:
     rt_hash = sha256(rt.encode()).hexdigest()
     raw = r.get(f'{rt_hash}')
-
+    import logging
+    logging.warning(f'rt_hash\n{rt_hash}')
+    logging.warning(f'raw\n{raw}')
     if not raw:
         return None
     
@@ -59,7 +61,7 @@ def refresh_token(rt:str)->tuple[str,str]|None:
     new_rt = secrets.token_urlsafe(32)
     new_rt_hash = sha256(new_rt.encode()).hexdigest()
 
-    r.set(f'{rt_hash}',json.dumps({
+    r.set(f'{new_rt_hash}',json.dumps({
         'user_id': data['user_id'],
         'family_id': data['family_id'],
         'is_used': False

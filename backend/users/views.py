@@ -6,6 +6,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .redis import r
 from .tokens import create_token_family,refresh_token, logout_token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotAuthenticated
+from core.models import *
 # Create your views here.
 class RegistrationView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
@@ -113,39 +116,28 @@ class LogoutView(generics.GenericAPIView):
         return response
 
 class ValidateView(generics.GenericAPIView):
+    serializer_class = ValidateSerializer
     def post(self, request):
-        if 'username' in request.data:
-            username = request.data['username']
-            if User.objects.filter(username=username).exists():
-                return Response({
-                    'username': 'Имя занято'
-                },status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            return Response({
-                'username': None
-            },status=status.HTTP_200_OK)
-            
-        if 'email' in request.data:
-            email = request.data['email']
-            if User.objects.filter(email=email).exists():
-                return Response({
-                    'email':'Email уже используется'
-                },status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            return Response({
-                'email': None
-            },status=status.HTTP_200_OK)
-            
-        if 'password' in request.data:
-            password= request.data['password']
-            try:
-                validate_password(password)
-            except ValidationError as e:
-                return Response({
-                    'password':list(e.messages)
-                },status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            return Response({
-                'password': None
-            },status=status.HTTP_200_OK)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        return Response({
-            'error': None
-        })
+class ProfileView(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
+    
+class HistoryView(generics.GenericAPIView):
+    queryset = History
+    serializer_class = TrackListSerializer
+    def get(self,request):
+        history = History.objects.filter(user=request.user).select_related('track')
+        tracks = [h.track for h in history]
+        serializer = TrackListSerializer(tracks, many=True)
+        # import time
+        # time.sleep(3)
+        return Response(serializer.data)

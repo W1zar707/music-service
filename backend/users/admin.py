@@ -14,7 +14,7 @@ class HistoryInline(admin.TabularInline):
     model = History
     extra = 0
     verbose_name = 'История'
-    verbose_name_plural = 'Истории'
+    verbose_name_plural = 'История'
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -22,4 +22,4 @@ class UserAdmin(DjangoUserAdmin):
     fieldsets = DjangoUserAdmin.fieldsets + (
         ('Дополнительно', {'fields': ('avatar',)}),
     )
-    inlines = [FavoriteTrackInline]
+    inlines = [FavoriteTrackInline,HistoryInline]

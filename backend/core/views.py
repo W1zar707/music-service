@@ -4,14 +4,17 @@ from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
+from django.http import HttpResponse
 from rest_framework import status
 from django_opensearch_dsl.search import Search
 from .documents import *
 from collections import defaultdict
+from rest_framework.permissions import IsAuthenticated
 from opensearchpy import Q
 import logging
 from .models import *
 from .serializers import *
+from silk.profiling.profiler import silk_profile
 # Create your views here.
 class ArtistListView(generics.GenericAPIView):
     queryset = Artist.objects.all()
@@ -55,8 +58,9 @@ class SuggestView(APIView):
         return Response({
             'suggest':suggestion
         })
-
+    
 class SearchView(APIView):
+    @silk_profile(name='Track List')
     def post(self, request):
         search_string = request.data['search']
         s = Search().index(
@@ -135,10 +139,10 @@ class SearchView(APIView):
                     album_ids.append(item['id'])
 
 
-        tracks = Track.objects.filter(id__in=track_ids).prefetch_related('album', 'artists')
+        tracks = Track.objects.filter(id__in=track_ids).select_related('album').prefetch_related('artists','album__artists')
         hits['tracks'] = TrackListSerializer(tracks,many=True).data
 
-        artists = Artist.objects.filter(id__in=artist_ids)
+        artists = Artist.objects.filter(id__in=artist_ids).prefetch_related('albums')
         hits['artists'] = ArtistListSerializer(artists,many=True).data
 
         albums = Album.objects.filter(id__in=album_ids).prefetch_related('artists')
@@ -146,3 +150,11 @@ class SearchView(APIView):
         return Response(
             hits
         )
+    
+class AudioStreamView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request,filepath):
+        response = HttpResponse()
+        response["X-Accel-Redirect"] = f"/protected/tracks/{filepath}"
+        response["Content-Type"] = "audio/mpeg"
+        return response

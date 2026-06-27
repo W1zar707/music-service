@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'users',
-    'django_opensearch_dsl'
+    'django_opensearch_dsl',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'music_service.urls'
@@ -123,7 +125,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ROOT_USER')
 AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_ROOT_PASSWORD')
 AWS_STORAGE_BUCKET_NAME = 'django-media'
 AWS_S3_ENDPOINT_URL = 'http://minio:9000'
-AWS_S3_CUSTOM_DOMAIN = 'localhost:9000/django-media'
+AWS_S3_CUSTOM_DOMAIN = 'localhost/django-media'
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_URL_PROTOCOL = 'http:'
 AWS_S3_USE_SSL = False
@@ -172,10 +174,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+SILKY_PYTHON_PROFILER = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 AUTH_USER_MODEL = 'users.User'

@@ -33,6 +33,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend:/app:ro
     depends_on:
       - backend
   minio:
@@ -43,7 +44,6 @@ services:
     env_file:
       - ./.env
     ports:
-      - "9000:9000"
       - "9001:9001"
     command: server /data --console-address ":9001"
     healthcheck:
